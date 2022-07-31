@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,11 +10,14 @@ public class Agent : MonoBehaviour
     [SerializeField] 
     private Transform destination;
 
-    private NavMeshAgent navMeshAgent;
+    public Path path;
+
+    private NavMeshAgent _navMeshAgent;
     // Start is called before the first frame update
     void Start()
     {
-        navMeshAgent = this.GetComponent<NavMeshAgent>();
+        path = new Path(this);
+        _navMeshAgent = this.GetComponent<NavMeshAgent>();
         SetDestination();
     }
 
@@ -21,7 +26,7 @@ public class Agent : MonoBehaviour
         if (destination != null)
         {
             Vector3 target = destination.transform.position;
-            navMeshAgent.SetDestination(target);
+            _navMeshAgent.SetDestination(target);
         }
     }
 
@@ -31,3 +36,33 @@ public class Agent : MonoBehaviour
         
     }
 }
+[Serializable]
+public class Path 
+{
+    
+    public List<Node> Nodes;
+    private Agent _agent;
+
+    public Path(Agent a)
+    {
+        _agent = a;
+        Nodes = new List<Node>();
+    }
+
+    
+}
+
+public class Node
+{
+    public Node(Vector3 pos)
+    {
+        this.pos = pos;
+    }
+    public Vector3 pos;
+}
+
+
+    
+
+    
+
