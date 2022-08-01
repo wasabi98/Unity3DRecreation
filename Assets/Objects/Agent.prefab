@@ -133,6 +133,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: {fileID: 0}
-  path:
-    nodes:
-    - {fileID: 0}
+  path: {fileID: 0}
