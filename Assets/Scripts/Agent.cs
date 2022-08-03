@@ -5,12 +5,12 @@ using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Agent : MonoBehaviour
 {
-    
-
     [SerializeField] private List<GameObject> path;
+    [SerializeField] public Text t;
     private int currentDestination;
     private bool isfollowing;
     private Animator _animatior;
@@ -24,21 +24,8 @@ public class Agent : MonoBehaviour
         currentDestination = 0;
         _animatior = GetComponent<Animator>();
         _navMeshAgent.SetDestination(path[currentDestination].transform.position);
-        
-
     }
-
-    private void FollowPath()
-    {
-            /*Vector3 target = destination.transform.position;
-            _navMeshAgent.SetDestination(target);*/
-            
-
-
-
-
-    }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -56,14 +43,14 @@ public class Agent : MonoBehaviour
             _navMeshAgent.SetDestination(path[currentDestination].transform.position);
         }
 
-        if (_navMeshAgent.velocity == Vector3.zero)
-        {
-            _animatior.SetBool("isWalking", false);
-        }
-        else
-        {
-            _animatior.SetBool("isWalking", true);
-        }
+       
+        
+        _animatior.SetFloat("velocityX", 0.0f);
+        _animatior.SetFloat("velocityY", _navMeshAgent.velocity.magnitude/10);
+        //t.text = (_navMeshAgent.velocity.magnitude/10).ToString();
+        t.text =  _animatior.GetFloat("velocityX")+ " " + _animatior.GetFloat("velocityY");
+       
+        
     }
 }
 
