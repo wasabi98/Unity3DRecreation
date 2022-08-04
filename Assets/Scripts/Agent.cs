@@ -14,6 +14,7 @@ public class Agent : MonoBehaviour
     private int currentDestination;
     private bool isfollowing;
     private Animator _animatior;
+    private float prevRotation;
     
 
     private NavMeshAgent _navMeshAgent;
@@ -24,11 +25,13 @@ public class Agent : MonoBehaviour
         currentDestination = 0;
         _animatior = GetComponent<Animator>();
         _navMeshAgent.SetDestination(path[currentDestination].transform.position);
+        prevRotation = transform.eulerAngles.y;
     }
     
     // Update is called once per frame
     void Update()
     {
+        //_navMeshAgent.Move(transform.forward * Time.deltaTime);
         if (transform.position.x == path[currentDestination].transform.position.x &&
             transform.position.z == path[currentDestination].transform.position.z)
         {
@@ -40,7 +43,9 @@ public class Agent : MonoBehaviour
             {
                 currentDestination = 0;
             }
+            
             _navMeshAgent.SetDestination(path[currentDestination].transform.position);
+            //_navMeshAgent.Move(transform.forward * Time.deltaTime);
         }
 
        
@@ -48,9 +53,11 @@ public class Agent : MonoBehaviour
         _animatior.SetFloat("velocityX", 0.0f);
         _animatior.SetFloat("velocityY", _navMeshAgent.velocity.magnitude/10);
         //t.text = (_navMeshAgent.velocity.magnitude/10).ToString();
-        t.text =  _animatior.GetFloat("velocityX")+ " " + _animatior.GetFloat("velocityY");
-       
-        
+        t.text = ((prevRotation)).ToString();
+        prevRotation = transform.eulerAngles.y;
+
+
+
     }
 }
 
