@@ -16,9 +16,9 @@ public class Agent : MonoBehaviour
     private Animator _animatior;
     private float prevRotation;
     [SerializeField] private bool Bpath;
-    
-
     private NavMeshAgent _navMeshAgent;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +36,7 @@ public class Agent : MonoBehaviour
         //_navMeshAgent.Move(transform.forward * Time.deltaTime);
         /*if (transform.position.x == path[currentDestination].transform.position.x &&
             transform.position.z == path[currentDestination].transform.position.z)*/
+        
         if(_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
         {
             if (currentDestination < path.Count - 1)
@@ -51,10 +52,27 @@ public class Agent : MonoBehaviour
             //_navMeshAgent.Move(transform.forward * Time.deltaTime);
         }
 
-       
+        float turn;
+        float offset = 60f;
+        if (prevRotation < transform.eulerAngles.y-offset)
+            turn = -0.2f;
+        else if (prevRotation > transform.eulerAngles.y+offset)
+            turn = 0.2f;
+        else
+            turn = 0f;
+            
         
-        _animatior.SetFloat("velocityX", 0.0f);
-        _animatior.SetFloat("velocityY", _navMeshAgent.velocity.magnitude/10);
+        
+        _animatior.SetFloat("velocityX", turn);
+        
+        
+        float speed;
+        if (_navMeshAgent.velocity.magnitude / 10 >= 0.8f)
+            speed = _navMeshAgent.velocity.magnitude / 10;
+        else
+            speed = 0.8f;
+        
+        _animatior.SetFloat("velocityY", speed);
         //t.text = (_navMeshAgent.velocity.magnitude/10).ToString();
         //t.text = ((prevRotation)).ToString();
         //prevRotation = transform.eulerAngles.y;
@@ -79,6 +97,10 @@ public class Agent : MonoBehaviour
             }
         }
     }
+    /*private void OnDrawGizmos()
+    {
+        //Gizmos.DrawSphere(Vector3.zero, 10f);
+    }*/
 }
 
     
