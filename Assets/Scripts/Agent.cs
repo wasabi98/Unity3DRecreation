@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,7 @@ using UnityEngine.UI;
 public class Agent : MonoBehaviour
 {
     [SerializeField] private List<GameObject> path;
-    [SerializeField] public Text t;
+    
     private int currentDestination;
     private bool isfollowing;
     private Animator _animatior;
