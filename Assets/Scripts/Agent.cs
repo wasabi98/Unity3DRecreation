@@ -6,17 +6,20 @@ using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Agent : MonoBehaviour
 {
     [SerializeField] private List<GameObject> path;
+
+    
     
     private int currentDestination;
     private bool isfollowing;
     private Animator _animatior;
     private float prevRotation;
-    [SerializeField] private bool Bpath;
+    [FormerlySerializedAs("Bpath")] /*[SerializeField]*/ private bool Draw_Path;
     private NavMeshAgent _navMeshAgent;
     
     
@@ -33,7 +36,6 @@ public class Agent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         //_navMeshAgent.Move(transform.forward * Time.deltaTime);
         /*if (transform.position.x == path[currentDestination].transform.position.x &&
             transform.position.z == path[currentDestination].transform.position.z)*/
@@ -53,6 +55,8 @@ public class Agent : MonoBehaviour
             //_navMeshAgent.Move(transform.forward * Time.deltaTime);
         }
 
+        #region Turn
+
         float turn;
         float offset = 60f;
         if (prevRotation < transform.eulerAngles.y-offset)
@@ -61,12 +65,13 @@ public class Agent : MonoBehaviour
             turn = 0.2f;
         else
             turn = 0f;
-            
-        
-        
+
         _animatior.SetFloat("velocityX", turn);
         
-        
+        #endregion
+
+        #region Speed
+
         float speed;
         if (_navMeshAgent.velocity.magnitude / 10 >= 0.8f)
             speed = _navMeshAgent.velocity.magnitude / 10;
@@ -78,23 +83,25 @@ public class Agent : MonoBehaviour
         //t.text = ((prevRotation)).ToString();
         //prevRotation = transform.eulerAngles.y;
 
-
-
+        #endregion
     }
 
     // source: https://www.youtube.com/watch?v=TpQbqRNCgM0&t=994s&ab_channel=TheKiwiCoder
     private void OnDrawGizmos()
     {
-        if (Bpath)
+        if (Draw_Path)
         {
             Vector3 prevCorner = transform.position;
-            var agentpath = _navMeshAgent.path;
-            foreach (var corner in agentpath.corners)
+            if (_navMeshAgent != null)
             {
-                Gizmos.color = Color.black;
-                Gizmos.DrawLine(prevCorner, corner);
-                Gizmos.DrawSphere(corner, 0.1f);
-                prevCorner = corner;
+                var agentpath = _navMeshAgent.path;
+                foreach (var corner in agentpath.corners)
+                {
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawLine(prevCorner, corner);
+                    Gizmos.DrawSphere(corner, 0.1f);
+                    prevCorner = corner;
+                }
             }
         }
     }
